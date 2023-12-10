@@ -28,7 +28,7 @@ const router = createBrowserRouter(
 
       <Route path='people' element={<TestLayout/>}>
         <Route index='people' element={<Test/>} loader={PeopleLoader}></Route>
-        <Route path=':id' element={<PeopleDetails/>} loader={PeopleDeatailsLoader} errorElement={<PeopleError/>}/>
+        <Route path={`:${id}`} element={<PeopleDetails/>} loader={PeopleDeatailsLoader} errorElement={<PeopleError/>}/>
       </Route>
 
       <Route path='*' element={<PageNotFound/>}></Route>
