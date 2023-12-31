@@ -10,6 +10,7 @@ const Post = ({ post }) => {
     <article >
       <h3>{post.title}</h3>
       <Author userId={post.userId} />
+      
       <p>{post.body.substring(0,20)}... <Link to={`posts/${post.id}`}> View more...</Link> </p>
       <p><TimeAgo timestamp={post.date} /></p>
       <Reactions post={post} />

@@ -1,7 +1,9 @@
 import './App.css'
 import Posts from './features/posts/posts'
 import AddPosts from './features/posts/AddPosts'
-import { createBrowserRouter, createRoutesFromElements, Routes, Route, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+import EditPost from './features/posts/EditPost'
+
 import RootLayout from './Layouts/RootLayout'
 import SinglePost from './features/posts/SinglePost'
 
@@ -12,7 +14,7 @@ const router = createBrowserRouter(
       <Route path='posts'>
         <Route index element={<AddPosts />} />
         <Route path=":postId" element={<SinglePost />} />
-        <Rout path="edit/:postId" element={<EditPost />}/>
+        <Route path="edit/:postId" element={<EditPost />}/>
       </Route>
     </Route>
   )

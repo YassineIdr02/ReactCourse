@@ -33,6 +33,33 @@ export const addNewPost = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk(
+  "posts/updatePost",
+  async (initialPost) => {
+    try {
+      const { id } = initialPost;
+      const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+      return response.data;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (initialState) => {
+    try {
+      const { id } = initialState;
+      const response = await axios.delete(`${POSTS_URL}/${id}`);
+      if (response.status === 200) return initialState; // here i'm returning the initailState to use in the addCase
+      return `${response.status}: ${response.statusText}`;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "posts",
   initialState,
@@ -104,13 +131,37 @@ const postSlice = createSlice({
         };
 
         state.posts.push(action.payload);
-      });
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Update could not get complete");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload;
+        action.payload.date = new Date().toISOString();
+        const existingPost = state.posts.find((post) => post.id == id);
+        action.payload.reactions = existingPost.reactions;
+        const newPostList = state.posts.filter((post) => post.id !== id);
+
+        state.posts = [...newPostList, action.payload];
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        if(!action.payload?.id){
+          console.log("Delete could not get complete");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload
+        const NewPosts = state.posts.filter(post => post.id != id )
+        state.posts = NewPosts
+      })
   },
 });
 
 export const { AddPost, AddReaction } = postSlice.actions;
 export const selectPostById = (state, postId) => {
-  return state.posts.posts.find(post => post.id == postId);
+  return state.posts.posts.find((post) => post.id == postId);
 };
 
 export const selectAllPosts = (state) => state.posts.posts;

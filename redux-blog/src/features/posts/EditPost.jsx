@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { selectAllUsers } from '../users/usersSlice'
-import { selectPostById } from './postSlice'
+import { selectPostById, updatePost } from './postSlice'
+
 
 const EditPost = () => {
     const { postId } = useParams();
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const users = useSelector(selectAllUsers)
-    const post = useSelector(selectPostById(state, postId))
+    const post = useSelector(state => selectPostById(state, postId))
     const [userId, setUserId] = useState(post?.userId)
     const [content, setContent] = useState(post?.body)
     const [title, setTitle] = useState(post?.title)
@@ -31,18 +32,19 @@ const EditPost = () => {
             {user.name}
         </option>
     ));
-
-    if (canSave) {
-        try {
-            setStatus('pending')
-            dispatch(updatePost({ id: post.id, body: content, title, userId })).unwrap()
-            setTitle('')
-            setContent('')
-            setUserId('')
-            navigate(`posts/${post.id}`)
-            setStatus('idle')
-        } catch (error) {
-            console.log(error)
+    const handleSubmit = () => {
+        if (canSave) {
+            try {
+                setStatus('pending')
+                dispatch(updatePost({ id: post.id, body: content, title, userId })).unwrap()
+                setTitle('')
+                setContent('')
+                setUserId('')
+                navigate(`/posts/${post.id}`)
+                setStatus('idle')
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 

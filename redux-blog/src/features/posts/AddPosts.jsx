@@ -50,7 +50,7 @@ const AddPosts = () => {
         <textarea type='text' name='content' id='content' value={content} onChange={handleContentInput} />
 
         <label htmlFor='userId'>Author</label>
-        <select name='userId' id='userId' onChange={handleAuthorInput}>
+        <select name='userId' id='userId' defaultValue={userId} onChange={handleAuthorInput}>
           <option value=''>Select author</option>
           {userIdOption}
         </select>
